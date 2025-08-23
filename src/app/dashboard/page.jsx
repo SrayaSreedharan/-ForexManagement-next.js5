@@ -18,7 +18,6 @@ import ReportsPage from "../components/ReportsPage";
 
 const drawerWidth = 260;
 
-// ✅ Light theme with white bg + black text
 const theme = createTheme({
   palette: {
     mode: "light",
