@@ -81,7 +81,6 @@ export default function Dashboard() {
           }}
         >
           <Toolbar>
-            {/* Menu button only on mobile */}
             <IconButton 
               edge="start" 
               onClick={handleDrawerToggle} 
