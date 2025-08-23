@@ -107,7 +107,6 @@ export default function Dashboard() {
               }}
             />
 
-            {/* Notifications */}
             <IconButton sx={{ ml: 2, color: "black" }}>
               <Badge badgeContent={3} color="secondary">
                 <NotificationsIcon />
