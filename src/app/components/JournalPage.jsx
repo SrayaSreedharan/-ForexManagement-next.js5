@@ -5,7 +5,7 @@ import { DataGrid } from "@mui/x-data-grid";
 
 export default function JournalPage() {
 
-    const rows = [
+const rows = [
   { id: 1, ref: "FX001", type: "Purchase", currency: "USD", amount: 500000, counterparty: "HSBC", date: "2025-08-01" },
   { id: 2, ref: "FX002", type: "Sale", currency: "EUR", amount: 300000, counterparty: "Citi", date: "2025-08-05" },
   { id: 3, ref: "FX003", type: "Transfer", currency: "JPY", amount: 1200000, counterparty: "JP Morgan", date: "2025-08-10" },
