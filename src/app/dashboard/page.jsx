@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import {
   AppBar, Toolbar, Typography, CssBaseline, Box, IconButton, Drawer,
   List, ListItem, ListItemButton, ListItemIcon, ListItemText,
-  Divider, Badge, TextField, InputAdornment, Tabs, Tab, Button
+  Divider, Badge, TextField, InputAdornment, Button
 } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -40,45 +40,43 @@ const theme = createTheme({
 
 export default function Dashboard() {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [tab, setTab] = useState(0);
+  const [activePage, setActivePage] = useState(0); // ← controls pages
 
   const handleDrawerToggle = () => setMobileOpen(!mobileOpen);
 
   // ---------------------------
-  // Sidebar (commented section)
+  // Sidebar with navigation
   // ---------------------------
-  // const drawer = (
-  //   <Box sx={{ height: "100%", display: "flex", flexDirection: "column" }}>
-  //     <Box sx={{ p: 2 }}>
-  //       <Typography variant="h6">FX Ops</Typography>
-  //       <Typography variant="body2" color="text.secondary">Internal Platform</Typography>
-  //     </Box>
-  //     <Divider />
-  //     <List>
-  //       {[
-  //         { text: "Dashboard", icon: <DashboardIcon /> },
-  //         { text: "Transactions", icon: <SwapHorizIcon /> },
-  //         { text: "Reconciliation", icon: <RuleFolderIcon /> },
-  //         { text: "Statements", icon: <ReceiptLongIcon /> },
-  //         { text: "Reports", icon: <AssessmentIcon /> },
-  //         { text: "Accounts", icon: <AccountBalanceIcon /> },
-  //         { text: "Settings", icon: <SettingsIcon /> },
-  //       ].map((item) => (
-  //         <ListItem key={item.text} disablePadding>
-  //           <ListItemButton>
-  //             <ListItemIcon>{item.icon}</ListItemIcon>
-  //             <ListItemText primary={item.text} />
-  //           </ListItemButton>
-  //         </ListItem>
-  //       ))}
-  //     </List>
-  //     <Box sx={{ mt: "auto", p: 2 }}>
-  //       <Button fullWidth variant="outlined" startIcon={<CloudUploadIcon />}>
-  //         Import Statement
-  //       </Button>
-  //     </Box>
-  //   </Box>
-  // );
+  const drawer = (
+    <Box sx={{ height: "100%", display: "flex", flexDirection: "column" }}>
+      <Box sx={{ p: 2 }}>
+        <Typography variant="h6">FX Ops</Typography>
+        <Typography variant="body2" color="text.secondary">Internal Platform</Typography>
+      </Box>
+      <Divider />
+      <List>
+        {[
+          { text: "Overview", icon: <DashboardIcon />, page: 0 },
+          { text: "Transaction Journal", icon: <SwapHorizIcon />, page: 1 },
+          { text: "Reconciliation", icon: <RuleFolderIcon />, page: 2 },
+          { text: "Reports", icon: <AssessmentIcon />, page: 3 },
+          
+        ].map((item) => (
+          <ListItem key={item.text} disablePadding>
+            <ListItemButton onClick={() => item.page !== undefined && setActivePage(item.page)}>
+              <ListItemIcon>{item.icon}</ListItemIcon>
+              <ListItemText primary={item.text} />
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
+      <Box sx={{ mt: "auto", p: 2 }}>
+        <Button fullWidth variant="outlined" startIcon={<CloudUploadIcon />}>
+          Import Statement
+        </Button>
+      </Box>
+    </Box>
+  );
 
   return (
     <ThemeProvider theme={theme}>
@@ -133,8 +131,7 @@ export default function Dashboard() {
           </Toolbar>
         </AppBar>
 
-        {/* Sidebar Drawer (commented out) */}
-        {/* 
+        {/* Sidebar Drawer */}
         <Box component="nav" sx={{ width: { md: drawerWidth }, flexShrink: { md: 0 } }}>
           <Drawer
             variant="temporary"
@@ -153,7 +150,6 @@ export default function Dashboard() {
             {drawer}
           </Drawer>
         </Box>
-        */}
 
         {/* Main Content */}
         <Box 
@@ -166,27 +162,11 @@ export default function Dashboard() {
         >
           <Toolbar />
           
-          {/* Responsive Tabs */}
-          <Box sx={{ borderBottom: "1px solid #000", mb: 2 }}>
-            <Tabs
-              value={tab}
-              onChange={(_, v) => setTab(v)}
-              textColor="primary"
-              indicatorColor="primary"
-              variant="scrollable"
-              scrollButtons="auto"
-            >
-              <Tab label="Overview" sx={{ fontWeight: "bold", fontSize: { xs: "0.9rem", md: "1rem" } }} />
-              <Tab label="Transaction Journal" sx={{ fontWeight: "bold", fontSize: { xs: "0.9rem", md: "1rem" } }} />
-              <Tab label="Reconciliation" sx={{ fontWeight: "bold", fontSize: { xs: "0.9rem", md: "1rem" } }} />
-              <Tab label="Reports" sx={{ fontWeight: "bold", fontSize: { xs: "0.9rem", md: "1rem" } }} />
-            </Tabs>
-          </Box>
-
-          {tab === 0 && <OverviewPage />}
-          {tab === 1 && <JournalPage />}
-          {tab === 2 && <ReconciliationPage />}
-          {tab === 3 && <ReportsPage />}
+          {/* Page Content controlled by sidebar */}
+          {activePage === 0 && <OverviewPage />}
+          {activePage === 1 && <JournalPage />}
+          {activePage === 2 && <ReconciliationPage />}
+          {activePage === 3 && <ReportsPage />}
         </Box>
       </Box>
     </ThemeProvider>
