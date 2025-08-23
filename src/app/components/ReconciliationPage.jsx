@@ -3,7 +3,8 @@ import React from "react";
 import { Typography, Card, CardContent } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 
-const rows = [
+export default function ReconciliationPage() {
+    const rows = [
   { id: 1, ref: "FX001", status: "Matched", systemAmt: 500000, bankAmt: 500000 },
   { id: 2, ref: "FX002", status: "Unmatched", systemAmt: 300000, bankAmt: 310000 },
   { id: 3, ref: "FX003", status: "Pending", systemAmt: 1200000, bankAmt: null },
@@ -16,7 +17,6 @@ const columns = [
   { field: "bankAmt", headerName: "Bank Amount", flex: 1 },
 ];
 
-export default function ReconciliationPage() {
   return (
     <Card>
       <CardContent>
