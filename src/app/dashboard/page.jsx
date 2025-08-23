@@ -89,7 +89,6 @@ export default function Dashboard() {
               <MenuIcon />
             </IconButton>
 
-            {/* Title */}
             <Typography variant="h6" sx={{ flexGrow: 1, fontWeight: "bold", color:'black' }}>
               FX Operations
             </Typography>
