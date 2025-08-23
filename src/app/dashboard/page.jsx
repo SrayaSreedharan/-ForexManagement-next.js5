@@ -32,13 +32,10 @@ const theme = createTheme({
 
 export default function Dashboard() {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [activePage, setActivePage] = useState(0); // ← controls pages
+  const [activePage, setActivePage] = useState(0); 
 
   const handleDrawerToggle = () => setMobileOpen(!mobileOpen);
-
-  // ---------------------------
-  // Sidebar with navigation
-  // ---------------------------
+  
   const drawer = (
     <Box sx={{ height: "100%", display: "flex", flexDirection: "column" }}>
       <Box sx={{ p: 2 }}>
