@@ -10,6 +10,7 @@ const rows = [
   { id: 2, ref: "FX002", type: "Sale", currency: "EUR", amount: 300000, counterparty: "Citi", date: "2025-08-05" },
   { id: 3, ref: "FX003", type: "Transfer", currency: "JPY", amount: 1200000, counterparty: "JP Morgan", date: "2025-08-10" },
 ];
+
 const columns = [
   { field: "ref", headerName: "Ref ID", flex: 1 },
   { field: "type", headerName: "Type", flex: 1 },
