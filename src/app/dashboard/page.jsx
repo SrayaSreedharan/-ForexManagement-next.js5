@@ -134,7 +134,6 @@ export default function Dashboard() {
           </Drawer>
         </Box>
 
-        {/* Main Content */}
         <Box 
           component="main" 
           sx={{ 
