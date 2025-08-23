@@ -22,9 +22,9 @@ const theme = createTheme({
   palette: {
     mode: "light",
     background: { default: "#ffffff", paper: "#ffffff" },
-    primary: { main: "#000000" },   // black
-    secondary: { main: "#333333" }, // dark gray
-    text: { primary: "#000000" }    // force black text
+    primary: { main: "#000000" },   
+    secondary: { main: "#333333" }, 
+    text: { primary: "#000000" }    
   },
   shape: { borderRadius: 16 },
   typography: { fontFamily: "Inter, system-ui, sans-serif" },
