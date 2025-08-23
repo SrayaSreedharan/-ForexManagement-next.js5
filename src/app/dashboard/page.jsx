@@ -35,7 +35,7 @@ export default function Dashboard() {
   const [activePage, setActivePage] = useState(0); 
 
   const handleDrawerToggle = () => setMobileOpen(!mobileOpen);
-  
+
   const drawer = (
     <Box sx={{ height: "100%", display: "flex", flexDirection: "column" }}>
       <Box sx={{ p: 2 }}>
@@ -72,7 +72,6 @@ export default function Dashboard() {
       <CssBaseline />
       <Box sx={{ display: "flex", minHeight: "100vh" }}>
         
-        {/* Top AppBar */}
         <AppBar 
           position="fixed" 
           sx={{ 
