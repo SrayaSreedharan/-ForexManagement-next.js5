@@ -143,8 +143,6 @@ export default function Dashboard() {
           }}
         >
           <Toolbar />
-          
-          {/* Page Content controlled by sidebar */}
           {activePage === 0 && <OverviewPage />}
           {activePage === 1 && <JournalPage />}
           {activePage === 2 && <ReconciliationPage />}
