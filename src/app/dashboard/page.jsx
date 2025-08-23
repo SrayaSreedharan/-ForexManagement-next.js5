@@ -115,7 +115,6 @@ export default function Dashboard() {
           </Toolbar>
         </AppBar>
 
-        {/* Sidebar Drawer */}
         <Box component="nav" sx={{ width: { md: drawerWidth }, flexShrink: { md: 0 } }}>
           <Drawer
             variant="temporary"
