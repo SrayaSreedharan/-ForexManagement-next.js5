@@ -11,10 +11,10 @@ export default function ReconciliationPage() {
     ];
 
     const columns = [
-    { field: "ref", headerName: "Ref ID", flex: 1 },
-    { field: "status", headerName: "Status", flex: 1 },
-    { field: "systemAmt", headerName: "System Amount", flex: 1 },
-    { field: "bankAmt", headerName: "Bank Amount", flex: 1 },
+        { field: "ref", headerName: "Ref ID", flex: 1 },
+        { field: "status", headerName: "Status", flex: 1 },
+        { field: "systemAmt", headerName: "System Amount", flex: 1 },
+        { field: "bankAmt", headerName: "Bank Amount", flex: 1 },
     ];
 
 return (
