@@ -93,7 +93,6 @@ export default function Dashboard() {
               FX Operations
             </Typography>
 
-            {/* Search only visible on sm+ */}
             <TextField
               size="small"
               placeholder="Search deals, refs, counterparties"
