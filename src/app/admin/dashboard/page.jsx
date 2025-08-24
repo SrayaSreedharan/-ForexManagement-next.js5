@@ -11,9 +11,7 @@ export default function Dashboard() {
     <Box sx={{ width: "100%", minHeight: "100vh" }}>
       <Navbar />
 
-      
       <Box sx={{ width: "100%", py: 4 }}>
-        {/* User Role */}
         <Box display="flex" justifyContent="flex-end" mb={3} px={2}>
           <Chip label="Administrator" color="warning" variant="outlined" />
         </Box>
