@@ -30,7 +30,6 @@ const Navbar = () => {
           </Box>
         </Box>
 
-        {/* Center: Navigation Menu */}
         <Box display="flex" alignItems="center" gap={2} ml={4}>
           <Button
             variant="contained"
