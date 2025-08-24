@@ -15,8 +15,6 @@ export default function Dashboard() {
         <Box display="flex" justifyContent="flex-end" mb={3} px={2}>
           <Chip label="Administrator" color="warning" variant="outlined" />
         </Box>
-
-        {/* Stats Cards */}
         <Grid container spacing={2} justifyContent="center">
   <Grid item>
     <Paper sx={{ p: 3, borderRadius: 2, width: 350 }}>
