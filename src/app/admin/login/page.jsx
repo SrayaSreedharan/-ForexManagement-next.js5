@@ -65,7 +65,7 @@ const LoginPage = () => {
             sx={{ mt: 2, py: 1.2 }}
             onSubmit={handleSubmit}
           >
-            Sign In
+            Sign In..
           </Button>
         </form>
       </Paper>
