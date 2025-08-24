@@ -18,7 +18,6 @@ const Navbar = () => {
     >
       <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
         
-        {/* Left side: Logo + Title */}
         <Box display="flex" alignItems="center" gap={1}>
           <Inventory2OutlinedIcon sx={{ fontSize: 32, color: "primary.main" }} />
           <Box>
