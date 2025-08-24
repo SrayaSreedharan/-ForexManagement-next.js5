@@ -63,7 +63,6 @@ const Navbar = () => {
           </Button>
         </Box>
 
-        
         <Avatar sx={{ bgcolor: "teal" }}>SJ</Avatar>
       </Toolbar>
     </AppBar>
