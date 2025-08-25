@@ -1,5 +1,4 @@
 "use client";
-
 import {AppBar, Toolbar, Typography, Button, Box, Avatar} from "@mui/material";
 import Inventory2OutlinedIcon from "@mui/icons-material/Inventory2Outlined";
 import DashboardIcon from "@mui/icons-material/Dashboard";
