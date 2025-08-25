@@ -31,7 +31,7 @@ const mockRequests = [
   },
 ];
 
-export default function PurchaseOrders() {
+const PurchaseOrders = () => {
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState(null);
 
@@ -141,4 +141,5 @@ export default function PurchaseOrders() {
     </Box>
   );
 }
+export default PurchaseOrders
 
