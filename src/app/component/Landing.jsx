@@ -8,7 +8,6 @@ import WarningAmberIcon from "@mui/icons-material/WarningAmber";
 const Landing = () => {
   return (
     <Box sx={{ width: "100%", minHeight: "100vh" }}>
-     
       <Box sx={{ width: "100%", py: 4 }}>
         <Box display="flex" justifyContent="flex-end" mb={3} px={2}>
           <Chip label="Administrator" color="warning" variant="outlined" />
