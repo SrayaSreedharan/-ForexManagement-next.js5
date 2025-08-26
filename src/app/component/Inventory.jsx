@@ -1,10 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import {
-  Container, Box, Button, Typography, Card, CardContent,
-  Chip, Table, TableHead, TableBody, TableRow, TableCell, TableContainer,
-  TextField, Select, MenuItem, Grid,
-  IconButton} from "@mui/material";
+import {Container, Box, Button, Typography, Card, CardContent,Chip, Table, TableHead, TableBody, TableRow, TableCell, TableContainer,TextField, Select, MenuItem, Grid,IconButton} from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import SearchIcon from "@mui/icons-material/Search";
 import InventoryAddModal from "./InventoryAddModals";
@@ -43,9 +39,7 @@ const Inventory = () => {
 
   const filteredItems = items.filter(item => {
     const matchesSearch =
-      item.name?.toLowerCase().includes(search.toLowerCase()) ||
-      item.sku?.toLowerCase().includes(search.toLowerCase()) ||
-      item.supplier?.toLowerCase().includes(search.toLowerCase());
+      item.name?.toLowerCase().includes(search.toLowerCase());
     const matchesCategory = categoryFilter === "" || item.category === categoryFilter;
     return matchesSearch && matchesCategory;
   });
