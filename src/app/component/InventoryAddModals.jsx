@@ -67,20 +67,19 @@ const handleAdd = async () => {
             </Grid>
           ))}
           <Grid item xs={4}>
-  <TextField
-    select
-    fullWidth
-    label="Category"
-    value={formData.category}
-    onChange={e => setFormData({ ...formData, category: e.target.value })}
-  >
-    <MenuItem value="">Select Category</MenuItem>
-    <MenuItem value="IT Equipment">IT Equipment</MenuItem>
-    <MenuItem value="Office Furniture">Office Furniture</MenuItem>
-    <MenuItem value="Office Supplies">Office Supplies</MenuItem>
-  </TextField>
-</Grid>
-
+            <TextField
+              select
+              fullWidth
+              label="Category"
+              value={formData.category}
+              onChange={e => setFormData({ ...formData, category: e.target.value })}
+            >
+              <MenuItem value="">Select Category</MenuItem>
+              <MenuItem value="IT Equipment">IT Equipment</MenuItem>
+              <MenuItem value="Office Furniture">Office Furniture</MenuItem>
+              <MenuItem value="Office Supplies">Office Supplies</MenuItem>
+            </TextField>
+          </Grid>
 
           <Grid item xs={4}>
             <TextField
