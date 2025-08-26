@@ -72,8 +72,7 @@ const handleAdd = async () => {
               fullWidth
               label="Category"
               value={formData.category}
-              onChange={e => setFormData({ ...formData, category: e.target.value })}
-            >
+              onChange={e => setFormData({ ...formData, category: e.target.value })}>
               <MenuItem value="">Select Category</MenuItem>
               <MenuItem value="IT Equipment">IT Equipment</MenuItem>
               <MenuItem value="Office Furniture">Office Furniture</MenuItem>
