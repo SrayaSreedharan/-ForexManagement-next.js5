@@ -4,7 +4,6 @@ export async function POST(req) {
   try {
     const { item, category, supplier, quantity, reason } = await req.json();
 
-    // Validate required fields
     if (!item || !quantity) {
       return new Response(
         JSON.stringify({ error: "Item and quantity are required." }),
@@ -20,17 +19,16 @@ export async function POST(req) {
       );
     }
 
-    // Insert into Supabase
     const { data, error } = await supabase
       .from('purchase_requests')
       .insert([
         {
           item,
-          category,   // ✅ added
-          supplier,   // ✅ added
+          category,   
+          supplier,   
           quantity: qty,
           reason,
-          status: "pending", // optional: ensure default
+          status: "pending", 
         }
       ])
       .select();
