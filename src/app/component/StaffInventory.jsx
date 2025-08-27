@@ -1,51 +1,102 @@
 "use client";
 
-import { useState } from "react";
-import {Box,Typography,Card,CardContent,Button,Grid,Dialog,DialogTitle,DialogContent,DialogActions,TextField,} from "@mui/material";
+import { useState, useEffect } from "react";
+import {
+  Box,
+  Typography,
+  Card,
+  CardContent,
+  Button,
+  Grid,
+} from "@mui/material";
+import StaffRequestModal from "./StaffRequestModal";
 
 const StaffInventory = () => {
   const [open, setOpen] = useState(false);
-  const [purchaseItem, setPurchaseItem] = useState("");
+  const [purchaseItem, setPurchaseItem] = useState(null); // store full item
+  const [items, setItems] = useState([]);
 
-  const items = [
-    { id: 1, name: "Printer Paper", stock: 50 },
-    { id: 2, name: "Ink Cartridge", stock: 10 },
-    { id: 3, name: "Stapler", stock: 25 },
-  ];
-
-  const handleRequest = (itemName) => {
-    setPurchaseItem(itemName);
-    setOpen(true);
+  const fetchItems = async () => {
+    try {
+      const res = await fetch("/api/inventory/get");
+      const result = await res.json();
+      if (res.ok) setItems(result.data || []);
+      else console.error("Fetch error:", result.error);
+    } catch (err) {
+      console.error("Unexpected error:", err);
+    }
   };
 
-  const handleSubmit = () => {
-    console.log("Purchase request submitted for:", purchaseItem);
-    setOpen(false);
+  useEffect(() => {
+    fetchItems();
+  }, []);
+
+  const handleRequest = (item) => {
+    setPurchaseItem(item); // ✅ store full object
+    setOpen(true);
   };
 
   return (
     <Box sx={{ mt: 4, ml: 4 }}>
-      <Typography variant="h5" fontWeight="bold" >
+      <Typography variant="h5" fontWeight="bold">
         Inventory
       </Typography>
       <Typography variant="body2" color="text.secondary" mb={3}>
         View available stock and request purchases
       </Typography>
-     
+
       <Grid container spacing={2}>
         {items.map((item) => (
-          <Grid item xs={12} md={4} key={item.id}>
-            <Card variant="outlined">
-              <CardContent>
-                <Typography variant="h6">{item.name}</Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Stock: {item.stock}
-                </Typography>
+          <Grid item xs={12} md={4} key={item.sku || item.id}>
+            <Card
+              variant="outlined"
+              sx={{
+                height: 200, // ✅ fixed height
+                width: "100%", // responsive width
+                display: "flex",
+                flexDirection: "column",
+              }}
+            >
+              <CardContent
+                sx={{
+                  flex: 1,
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between", // keeps button at bottom
+                }}
+              >
+                <Box>
+                  <Typography sx={{ color: "blue" }}>
+                    {item.category}
+                  </Typography>
+                  <Typography variant="h6" noWrap>
+                    {item.name}
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      display: "-webkit-box",
+                      WebkitLineClamp: 2, // ✅ max 2 lines
+                      WebkitBoxOrient: "vertical",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                    }}
+                  >
+                    {item.description}
+                  </Typography>
+                  <Typography sx={{ color: "#2e7d32" }}>
+                    Supplier: {item.supplier}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Stock: {item.stock}
+                  </Typography>
+                </Box>
+
                 <Button
                   variant="contained"
                   color="primary"
                   sx={{ mt: 2 }}
-                  onClick={() => handleRequest(item.name)}
+                  onClick={() => handleRequest(item)}
                 >
                   Request Purchase
                 </Button>
@@ -55,33 +106,12 @@ const StaffInventory = () => {
         ))}
       </Grid>
 
-      <Dialog open={open} onClose={() => setOpen(false)}>
-        <DialogTitle>Purchase Request</DialogTitle>
-        <DialogContent>
-          <Typography mb={2}>
-            Requesting purchase for: <b>{purchaseItem}</b>
-          </Typography>
-          <TextField
-            label="Quantity"
-            type="number"
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            label="Reason"
-            multiline
-            rows={3}
-            fullWidth
-            margin="normal"
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setOpen(false)}>Cancel</Button>
-          <Button variant="contained" onClick={handleSubmit}>
-            Submit Request
-          </Button>
-        </DialogActions>
-      </Dialog>
+      {/* Staff Request Modal */}
+      <StaffRequestModal
+        open={open}
+        onClose={() => setOpen(false)}
+        item={purchaseItem} // ✅ pass whole object
+      />
     </Box>
   );
 };

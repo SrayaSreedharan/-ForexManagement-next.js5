@@ -12,9 +12,9 @@ const Landing = () => {
         <Box display="flex" justifyContent="flex-end" mb={3} px={2}>
           <Chip label="Administrator" color="warning" variant="outlined" />
         </Box>
-        <Grid container spacing={2} justifyContent="center">
+       <Grid container spacing={2} justifyContent="center">
         <Grid item>
-            <Paper sx={{ p: 3, borderRadius: 2, width: 350 }}>
+            <Paper sx={{ p: 3, borderRadius: 2, width: 350, backgroundColor: 'primary.light' }}>
             <Box display="flex" justifyContent="space-between" alignItems="center">
                 <Typography variant="subtitle1" fontWeight="bold">
                 Total Inventory Items
@@ -31,7 +31,7 @@ const Landing = () => {
         </Grid>
 
         <Grid item>
-            <Paper sx={{ p: 3, borderRadius: 2, width: 350 }}>
+            <Paper sx={{ p: 3, borderRadius: 2, width: 350, backgroundColor: 'warning.light' }}>
             <Box display="flex" justifyContent="space-between" alignItems="center">
                 <Typography variant="subtitle1" fontWeight="bold">
                 Pending Purchase Orders
@@ -48,7 +48,7 @@ const Landing = () => {
         </Grid>
 
         <Grid item>
-            <Paper sx={{ p: 3, borderRadius: 2, width: 350 }}>
+            <Paper sx={{ p: 3, borderRadius: 2, width: 350, backgroundColor: 'success.light' }}>
             <Box display="flex" justifyContent="space-between" alignItems="center">
                 <Typography variant="subtitle1" fontWeight="bold">
                 Orders Delivered Today
@@ -65,7 +65,7 @@ const Landing = () => {
         </Grid>
 
         <Grid item>
-            <Paper sx={{ p: 3, borderRadius: 2, width: 350 }}>
+            <Paper sx={{ p: 3, borderRadius: 2, width: 350, backgroundColor: 'error.light' }}>
             <Box display="flex" justifyContent="space-between" alignItems="center">
                 <Typography variant="subtitle1" fontWeight="bold">
                 Low Stock Alerts
@@ -81,6 +81,7 @@ const Landing = () => {
             </Paper>
         </Grid>
         </Grid>
+
         <Grid container spacing={2} justifyContent="center" mt={3}>
         <Grid item>
             <Paper sx={{ p: 3, borderRadius: 3, width: { xs: "100%", sm: 500, md: 720 }, height: 250 }}>

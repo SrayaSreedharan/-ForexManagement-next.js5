@@ -1,39 +1,44 @@
 "use client";
 
-import { useState } from "react";
-import {Box,Typography,Table,TableBody,TableCell,TableContainer,TableHead,TableRow,Paper,IconButton,Modal,Divider,Button,} from "@mui/material";
+import { useState, useEffect } from "react";
+import {
+  Box,
+  Typography,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  IconButton,
+  Modal,
+  Divider,Button,} from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
 
-const mockRequests = [
-  {
-    id: "PR-101",
-    item: "Printer Paper",
-    category: "Office Supplies",
-    quantity: 50,
-    supplier: "ABC Supplies",
-    requestor: "John Doe",
-    status: "Pending",
-    unitCost: 120,
-    deliveryDate: "2025-09-01",
-  },
-  {
-    id: "PR-102",
-    item: "Laptop",
-    category: "Electronics",
-    quantity: 5,
-    supplier: "XYZ Tech",
-    requestor: "Jane Smith",
-    status: "Approved",
-    unitCost: 75000,
-    deliveryDate: "2025-09-10",
-  },
-];
-
 const PurchaseOrders = () => {
+  const [requests, setRequests] = useState([]);
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  const fetchData = async () => {
+    try {
+      const res = await fetch("/api/staffinventory/get");
+      const data = await res.json();
+      setRequests(data);
+    } catch (error) {
+      console.error("Error fetching requests:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const handleOpen = (req) => {
     setSelected(req);
@@ -45,16 +50,32 @@ const PurchaseOrders = () => {
     setSelected(null);
   };
 
+  // ✅ Update status and then refetch
+  const handleStatusChange = async (id, status) => {
+    const res = await fetch(`/api/staffinventory/status`, {
+      method: "PUT",
+      body: JSON.stringify({ id, status }),
+    });
+
+    if (res.ok) {
+      fetchData(); // ✅ now works
+    }
+  };
+
+
+
+  if (loading) return <Typography>Loading requests...</Typography>;
+
   return (
     <Box p={3}>
       <Typography variant="h5" fontWeight="bold">
         Purchase Requests
       </Typography>
-       <Typography variant="body2" color="text.secondary">
-       Manage purchase orders and approval workflow
+      <Typography variant="body2" color="text.secondary">
+        Manage purchase orders and approval workflow
       </Typography>
 
-      <TableContainer component={Paper}  sx={{mt:5}}>
+      <TableContainer component={Paper} sx={{ mt: 5 }}>
         <Table>
           <TableHead>
             <TableRow>
@@ -69,7 +90,7 @@ const PurchaseOrders = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {mockRequests.map((req) => (
+            {requests.map((req) => (
               <TableRow key={req.id}>
                 <TableCell>{req.id}</TableCell>
                 <TableCell>{req.item}</TableCell>
@@ -82,10 +103,16 @@ const PurchaseOrders = () => {
                   <IconButton color="primary" onClick={() => handleOpen(req)}>
                     <VisibilityIcon />
                   </IconButton>
-                  <IconButton color="success">
+                  <IconButton
+                    color="success"
+                    onClick={() => handleStatusChange(req.id, "Approved")}
+                  >
                     <CheckCircleIcon />
                   </IconButton>
-                  <IconButton color="error">
+                  <IconButton
+                    color="error"
+                    onClick={() => handleStatusChange(req.id, "Rejected")}
+                  >
                     <CancelIcon />
                   </IconButton>
                 </TableCell>
@@ -115,19 +142,45 @@ const PurchaseOrders = () => {
                 Request Detail – {selected.id}
               </Typography>
               <Divider sx={{ mb: 2 }} />
-              <Typography><b>Item:</b> {selected.item}</Typography>
-              <Typography><b>Category:</b> {selected.category}</Typography>
-              <Typography><b>Quantity:</b> {selected.quantity}</Typography>
-              <Typography><b>Supplier:</b> {selected.supplier}</Typography>
-              <Typography><b>Requestor:</b> {selected.requestor}</Typography>
-              <Typography><b>Status:</b> {selected.status}</Typography>
-              <Typography><b>Unit Cost:</b> ₹{selected.unitCost}</Typography>
-              <Typography><b>Delivery Date:</b> {selected.deliveryDate}</Typography>
+              <Typography>
+                <b>Item:</b> {selected.item}
+              </Typography>
+              <Typography>
+                <b>Category:</b> {selected.category}
+              </Typography>
+              <Typography>
+                <b>Quantity:</b> {selected.quantity}
+              </Typography>
+              <Typography>
+                <b>Supplier:</b> {selected.supplier}
+              </Typography>
+              <Typography>
+                <b>Requestor:</b> {selected.requestor}
+              </Typography>
+              <Typography>
+                <b>Status:</b> {selected.status}
+              </Typography>
+              <Typography>
+                <b>Unit Cost:</b> ₹{selected.unitCost}
+              </Typography>
+              <Typography>
+                <b>Delivery Date:</b> {selected.deliveryDate}
+              </Typography>
               <Box mt={3} display="flex" justifyContent="space-between">
-                <Button variant="contained" color="success" startIcon={<CheckCircleIcon />}>
+                <Button
+                  variant="contained"
+                  color="success"
+                  startIcon={<CheckCircleIcon />}
+                  onClick={() => handleStatusChange(selected.id, "Approved")}
+                >
                   Approve
                 </Button>
-                <Button variant="contained" color="error" startIcon={<CancelIcon />}>
+                <Button
+                  variant="contained"
+                  color="error"
+                  startIcon={<CancelIcon />}
+                  onClick={() => handleStatusChange(selected.id, "Rejected")}
+                >
                   Reject
                 </Button>
                 <Button variant="outlined" onClick={handleClose}>
@@ -140,6 +193,6 @@ const PurchaseOrders = () => {
       </Modal>
     </Box>
   );
-}
-export default PurchaseOrders
+};
 
+export default PurchaseOrders;

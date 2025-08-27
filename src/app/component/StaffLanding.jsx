@@ -1,52 +1,61 @@
 "use client";
 
-import { useState } from "react";
-import {Box,Typography,Grid,Paper,Table,TableHead,TableRow,TableCell,TableBody,Chip,Button,IconButton,} from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
-import VisibilityIcon from "@mui/icons-material/Visibility";
+import { useState, useEffect } from "react";
+import {
+  Box,
+  Typography,
+  Grid,
+  Paper,
+  Table,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody,
+  Chip,
+} from "@mui/material";
 
 const StaffLanding = () => {
-    const mockRequests = [
-  {
-    id: "PR-201",
-    item: "Printer Paper",
-    quantity: 50,
-    date: "2025-08-20",
-    status: "Approved",
-  },
-  {
-    id: "PR-202",
-    item: "Laptop",
-    quantity: 2,
-    date: "2025-08-22",
-    status: "Pending",
-  },
-  {
-    id: "PR-203",
-    item: "Markers",
-    quantity: 20,
-    date: "2025-08-23",
-    status: "Rejected",
-  },
-];
+  const [requests, setRequests] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const [requests, setRequests] = useState(mockRequests);
+  // ✅ Fetch requests from backend
+  const fetchData = async () => {
+    try {
+      const res = await fetch("/api/staffinventory/get");
+      const data = await res.json();
+      setRequests(data);
+    } catch (err) {
+      console.error("Error fetching staff requests:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  // ✅ Map status to chip colors
   const statusColor = (status) => {
-    switch (status) {
-      case "Approved":
+    switch (status?.toLowerCase()) {
+      case "approved":
         return "success";
-      case "Pending":
+      case "pending":
         return "warning";
-      case "Rejected":
+      case "rejected":
         return "error";
       default:
         return "default";
     }
   };
 
+  if (loading) {
+    return <Typography sx={{ mt: 4, ml: 4 }}>Loading requests...</Typography>;
+  }
+
   return (
     <Box p={3}>
+      {/* Header */}
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
         <Box>
           <Typography variant="h5" fontWeight="bold">
@@ -56,36 +65,46 @@ const StaffLanding = () => {
             Track your purchase requests and status updates
           </Typography>
         </Box>
-        {/* <Button variant="contained" startIcon={<AddIcon />}>
-          New Request
-        </Button> */}
       </Box>
 
+      {/* Summary Cards */}
       <Grid container spacing={2} mb={3}>
-        <Grid item xs={12} md={4}>
-          <Paper sx={{ p: 2, width: 470 }}>
+        <Grid item xs={12} md={3}>
+          <Paper sx={{ p: 2, bgcolor: "yellow",width:340 }}>
             <Typography variant="h6">Total Requests</Typography>
             <Typography variant="h4">{requests.length}</Typography>
           </Paper>
         </Grid>
-        <Grid item xs={12} md={4}>
-          <Paper sx={{ p: 2, width: 470}}>
+
+        <Grid item xs={12} md={3}>
+          <Paper sx={{ p: 2, bgcolor: "green", color: "white",width:340 }}>
             <Typography variant="h6">Approved</Typography>
             <Typography variant="h4">
-              {requests.filter((r) => r.status === "Approved").length}
+              {requests.filter((r) => r.status?.toLowerCase() === "approved").length}
             </Typography>
           </Paper>
         </Grid>
-        <Grid item xs={12} md={4}>
-          <Paper sx={{ p: 2, width: 470 }}>
+
+        <Grid item xs={12} md={3}>
+          <Paper sx={{ p: 2, bgcolor: "orange", color: "white",width:340 }}>
             <Typography variant="h6">Pending</Typography>
             <Typography variant="h4">
-              {requests.filter((r) => r.status === "Pending").length}
+              {requests.filter((r) => r.status?.toLowerCase() === "pending").length}
+            </Typography>
+          </Paper>
+        </Grid>
+
+        <Grid item xs={12} md={3}>
+          <Paper sx={{ p: 2, bgcolor: "red", color: "white",width:340 }}>
+            <Typography variant="h6">Rejected</Typography>
+            <Typography variant="h4">
+              {requests.filter((r) => r.status?.toLowerCase() === "rejected").length}
             </Typography>
           </Paper>
         </Grid>
       </Grid>
 
+      {/* Requests Table */}
       <Paper>
         <Table>
           <TableHead>
@@ -93,9 +112,7 @@ const StaffLanding = () => {
               <TableCell>Request ID</TableCell>
               <TableCell>Item</TableCell>
               <TableCell>Quantity</TableCell>
-              <TableCell>Date</TableCell>
               <TableCell>Status</TableCell>
-              <TableCell align="center">Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -104,14 +121,12 @@ const StaffLanding = () => {
                 <TableCell>{req.id}</TableCell>
                 <TableCell>{req.item}</TableCell>
                 <TableCell>{req.quantity}</TableCell>
-                <TableCell>{req.date}</TableCell>
                 <TableCell>
-                  <Chip label={req.status} color={statusColor(req.status)} size="small" />
-                </TableCell>
-                <TableCell align="center">
-                  <IconButton color="primary">
-                    <VisibilityIcon />
-                  </IconButton>
+                  <Chip
+                    label={req.status}
+                    color={statusColor(req.status)}
+                    size="small"
+                  />
                 </TableCell>
               </TableRow>
             ))}
@@ -120,5 +135,6 @@ const StaffLanding = () => {
       </Paper>
     </Box>
   );
-}
-export default  StaffLanding
+};
+
+export default StaffLanding;
