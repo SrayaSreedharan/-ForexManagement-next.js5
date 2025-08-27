@@ -1,19 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import {
-  Box,
-  Typography,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  IconButton,
-  Modal,
-  Divider,Button,} from "@mui/material";
+import {Box,Typography,Table,TableBody,TableCell,TableContainer,TableHead,TableRow,Paper,IconButton,Modal,Divider,Button,} from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
@@ -23,6 +11,8 @@ const PurchaseOrders = () => {
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState(null);
   const [loading, setLoading] = useState(true);
+
+// =======================================FETCH STAFF INVENTORY DATA===========================
 
   const fetchData = async () => {
     try {
@@ -49,8 +39,7 @@ const PurchaseOrders = () => {
     setOpen(false);
     setSelected(null);
   };
-
-  // ✅ Update status and then refetch
+// =========================================STAUS UPADTED=============================
   const handleStatusChange = async (id, status) => {
     const res = await fetch(`/api/staffinventory/status`, {
       method: "PUT",
@@ -58,15 +47,13 @@ const PurchaseOrders = () => {
     });
 
     if (res.ok) {
-      fetchData(); // ✅ now works
+      fetchData(); 
     }
   };
 
-
-
   if (loading) return <Typography>Loading requests...</Typography>;
 
-  return (
+ return (
     <Box p={3}>
       <Typography variant="h5" fontWeight="bold">
         Purchase Requests
