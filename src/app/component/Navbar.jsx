@@ -18,7 +18,7 @@ const Navbar = ({ activeContent, setActiveContent }) => {
   { label: "Admin", id: "admin", icon: <SecurityIcon /> },
 ];
 
-  return (
+return (
     <AppBar position="static" color="inherit" elevation={1} sx={{ bgcolor: "#fafafa", color: "text.primary" }}>
       <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
         <Box display="flex" alignItems="center" gap={1}>
