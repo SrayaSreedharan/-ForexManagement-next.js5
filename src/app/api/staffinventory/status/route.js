@@ -12,11 +12,10 @@ export async function PUT(req) {
     }
 
    const { data, error } = await supabase
-  .from("purchase_requests")
-  .update({ status })   // must match DB column exactly
-  .eq("id", id)         // must match primary key column name
-  .select();
-
+    .from("purchase_requests")
+    .update({ status })   
+    .eq("id", id)        
+    .select();
 
     if (error) {
       return new Response(JSON.stringify({ error: error.message }), {
@@ -24,7 +23,6 @@ export async function PUT(req) {
       });
     }
 
-    // ✅ Always return JSON
     return new Response(JSON.stringify({ data }), { status: 200 });
   } catch (err) {
     return new Response(JSON.stringify({ error: err.message }), {
