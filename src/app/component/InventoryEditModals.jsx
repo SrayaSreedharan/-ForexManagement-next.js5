@@ -19,7 +19,6 @@ const InventoryEditModal = ({ open, onClose, item, onUpdated }) => {
   };
 
 // =====================================INVENTORY UPDATE===================================
-
   const handleSave = async () => {
     setLoading(true);
     try {
