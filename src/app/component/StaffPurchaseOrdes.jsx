@@ -1,24 +1,12 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import {
-  Box,
-  Typography,
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
-  Chip,
-  Paper,
-  TableContainer,
-} from "@mui/material";
+import {Box,Typography,Table,TableHead,TableRow,TableCell,TableBody,Chip,Paper,TableContainer,} from "@mui/material";
 
 const StaffPurchaseOrders = () => {
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Fetch requests from backend
   const fetchData = async () => {
     try {
       const res = await fetch("/api/staffinventory/get");
