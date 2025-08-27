@@ -1,24 +1,12 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import {
-  Box,
-  Typography,
-  Grid,
-  Paper,
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
-  Chip,
-} from "@mui/material";
+import {Box,Typography,Grid,Paper,Table,TableHead,TableRow,TableCell,TableBody,Chip,} from "@mui/material";
 
 const StaffLanding = () => {
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // ✅ Fetch requests from backend
   const fetchData = async () => {
     try {
       const res = await fetch("/api/staffinventory/get");
@@ -34,8 +22,7 @@ const StaffLanding = () => {
   useEffect(() => {
     fetchData();
   }, []);
-
-  // ✅ Map status to chip colors
+// -----------------------colour mapping-------------------
   const statusColor = (status) => {
     switch (status?.toLowerCase()) {
       case "approved":
@@ -55,7 +42,6 @@ const StaffLanding = () => {
 
   return (
     <Box p={3}>
-      {/* Header */}
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
         <Box>
           <Typography variant="h5" fontWeight="bold">
@@ -66,8 +52,6 @@ const StaffLanding = () => {
           </Typography>
         </Box>
       </Box>
-
-      {/* Summary Cards */}
       <Grid container spacing={2} mb={3}>
         <Grid item xs={12} md={3}>
           <Paper sx={{ p: 2, bgcolor: "yellow",width:340 }}>
@@ -103,8 +87,6 @@ const StaffLanding = () => {
           </Paper>
         </Grid>
       </Grid>
-
-      {/* Requests Table */}
       <Paper>
         <Table>
           <TableHead>
