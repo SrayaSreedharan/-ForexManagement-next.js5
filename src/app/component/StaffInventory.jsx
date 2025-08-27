@@ -1,21 +1,15 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import {
-  Box,
-  Typography,
-  Card,
-  CardContent,
-  Button,
-  Grid,
-} from "@mui/material";
+import {Box,Typography,Card,CardContent,Button,Grid,} from "@mui/material";
 import StaffRequestModal from "./StaffRequestModal";
 
 const StaffInventory = () => {
   const [open, setOpen] = useState(false);
-  const [purchaseItem, setPurchaseItem] = useState(null); // store full item
+  const [purchaseItem, setPurchaseItem] = useState(null); 
   const [items, setItems] = useState([]);
 
+// =================================INVENTORY FETCH===================================
   const fetchItems = async () => {
     try {
       const res = await fetch("/api/inventory/get");
@@ -32,7 +26,7 @@ const StaffInventory = () => {
   }, []);
 
   const handleRequest = (item) => {
-    setPurchaseItem(item); // ✅ store full object
+    setPurchaseItem(item); 
     setOpen(true);
   };
 
@@ -51,8 +45,8 @@ const StaffInventory = () => {
             <Card
               variant="outlined"
               sx={{
-                height: 200, // ✅ fixed height
-                width: "100%", // responsive width
+                height: 200, 
+                width: "100%", 
                 display: "flex",
                 flexDirection: "column",
               }}
@@ -62,7 +56,7 @@ const StaffInventory = () => {
                   flex: 1,
                   display: "flex",
                   flexDirection: "column",
-                  justifyContent: "space-between", // keeps button at bottom
+                  justifyContent: "space-between", 
                 }}
               >
                 <Box>
@@ -76,7 +70,7 @@ const StaffInventory = () => {
                     variant="body2"
                     sx={{
                       display: "-webkit-box",
-                      WebkitLineClamp: 2, // ✅ max 2 lines
+                      WebkitLineClamp: 2, 
                       WebkitBoxOrient: "vertical",
                       overflow: "hidden",
                       textOverflow: "ellipsis",
@@ -105,13 +99,8 @@ const StaffInventory = () => {
           </Grid>
         ))}
       </Grid>
-
-      {/* Staff Request Modal */}
-      <StaffRequestModal
-        open={open}
-        onClose={() => setOpen(false)}
-        item={purchaseItem} // ✅ pass whole object
-      />
+{/* ----------------------STAFF REQUEST MODAL--------------------------- */}
+      <StaffRequestModal open={open} onClose={() => setOpen(false)} item={purchaseItem} />
     </Box>
   );
 };
