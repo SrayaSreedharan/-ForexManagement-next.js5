@@ -34,6 +34,7 @@ const Inventory = () => {
 
   const handleAdded = (newItem) => setItems((prev) => [newItem, ...prev]);
 
+  
 // -------------EDIT SECTION----------------
   const handleEditClick = (item) => {
     setSelectedItem(item);
