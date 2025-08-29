@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 
 export async function GET() {
   try {
-    // fetch reconciliations with related purchase requests
+   
     const { data, error } = await supabase
       .from("reconciliations")
       .select(`
@@ -26,7 +26,7 @@ export async function GET() {
 
     return NextResponse.json({ reconciliations: data }, { status: 200 });
   } catch (err) {
-    console.error("❌ GET /api/reconcile/get error:", err.message);
+    console.error(" GET /api/reconcile/get error:", err.message);
     return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }
