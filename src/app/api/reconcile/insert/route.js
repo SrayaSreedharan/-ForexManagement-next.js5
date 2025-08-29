@@ -13,7 +13,6 @@ export async function POST(req) {
       );
     }
 
-    // 1️⃣ fetch requested amount from purchase_requests
     const { data: pr, error: prError } = await supabase
       .from("purchase_requests")
       .select("quantity")
@@ -29,13 +28,11 @@ export async function POST(req) {
 
     const requestedAmount = pr.quantity;
 
-    // 2️⃣ determine reconciliation status
     const status =
       Number(invoiceAmount) === Number(requestedAmount)
         ? "Matched"
         : "Mismatch";
 
-    // 3️⃣ insert into reconciliations
     const { data, error } = await supabase
       .from("reconciliations")
       .insert([
