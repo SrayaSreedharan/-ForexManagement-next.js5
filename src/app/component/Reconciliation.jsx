@@ -1,30 +1,17 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import {
-  Box,
-  Typography,
-  Table,
-  TableHead,
-  TableBody,
-  TableRow,
-  TableCell,
-  TableContainer,
-  Paper,
-  Button,
-  TextField,
-  Chip,
-} from "@mui/material";
+import {Box,Typography,Table,TableHead,TableBody,TableRow,TableCell,TableContainer,Paper,Button,TextField,Chip,} from "@mui/material";
 
 export default function ReconciliationPage() {
   const [recs, setRecs] = useState([]);
   const [loading, setLoading] = useState(false);
   const [invoiceAmount, setInvoiceAmount] = useState({});
 
-  // fetch all reconciliations
+// =======================================GET DATA===============================
   const fetchReconciliations = async () => {
     try {
-      const res = await fetch("/api/reconcile/get"); // ✅ calls GET
+      const res = await fetch("/api/reconcile/get");
       const data = await res.json();
       setRecs(data.reconciliations || []);
     } catch (err) {
@@ -36,11 +23,11 @@ export default function ReconciliationPage() {
     fetchReconciliations();
   }, []);
 
-  // handle reconciliation insert
+  // =======================================INSERT================================================
   const handleReconcile = async (purchaseRequestId) => {
     try {
       setLoading(true);
-      const res = await fetch("/api/reconcile/insert", { // ✅ insert, not get
+      const res = await fetch("/api/reconcile/insert", { 
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -53,7 +40,7 @@ export default function ReconciliationPage() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error);
 
-      await fetchReconciliations(); // refresh list
+      await fetchReconciliations(); 
       setInvoiceAmount((prev) => ({ ...prev, [purchaseRequestId]: "" }));
     } catch (err) {
       console.error("Reconcile failed:", err);
@@ -61,8 +48,6 @@ export default function ReconciliationPage() {
       setLoading(false);
     }
   };
-
-  // chip colors
   const statusColor = (status) => {
     switch (status) {
       case "Matched":
