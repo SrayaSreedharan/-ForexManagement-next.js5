@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Box,
   Typography,
@@ -11,60 +11,58 @@ import {
   TableCell,
   TableContainer,
   Paper,
-  IconButton,
-  Chip,
-  Modal,
-  Divider,
   Button,
+  TextField,
+  Chip,
 } from "@mui/material";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import CancelIcon from "@mui/icons-material/Cancel";
 
-const mockReconciliations = [
-  {
-    id: "REC-201",
-    purchaseId: "PR-101",
-    item: "Printer Paper",
-    supplier: "ABC Supplies",
-    requestedAmount: 6000,
-    invoiceAmount: 6000,
-    status: "Matched",
-    reconciledBy: "Admin John",
-    date: "2025-08-22",
-  },
-  {
-    id: "REC-202",
-    purchaseId: "PR-102",
-    item: "Laptop",
-    supplier: "XYZ Tech",
-    requestedAmount: 375000,
-    invoiceAmount: 380000,
-    status: "Mismatch",
-    reconciledBy: "Admin Jane",
-    date: "2025-08-23",
-  },
-];
+export default function ReconciliationPage() {
+  const [recs, setRecs] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [invoiceAmount, setInvoiceAmount] = useState({});
 
-export default function Reconciliation() {
-  const [open, setOpen] = useState(false);
-  const [selected, setSelected] = useState(null);
-
-  const handleOpen = (rec) => {
-    setSelected(rec);
-    setOpen(true);
+  // fetch all reconciliations
+  const fetchReconciliations = async () => {
+    try {
+      const res = await fetch("/api/reconcile/get"); // ✅ calls GET
+      const data = await res.json();
+      setRecs(data.reconciliations || []);
+    } catch (err) {
+      console.error("Error fetching reconciliations:", err);
+    }
   };
 
-  const handleClose = () => {
-    setSelected(null);
-    setOpen(false);
+  useEffect(() => {
+    fetchReconciliations();
+  }, []);
+
+  // handle reconciliation insert
+  const handleReconcile = async (purchaseRequestId) => {
+    try {
+      setLoading(true);
+      const res = await fetch("/api/reconcile/insert", { // ✅ insert, not get
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          purchaseRequestId,
+          invoiceAmount: invoiceAmount[purchaseRequestId],
+          reconciledBy: "Admin",
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error);
+
+      await fetchReconciliations(); // refresh list
+      setInvoiceAmount((prev) => ({ ...prev, [purchaseRequestId]: "" }));
+    } catch (err) {
+      console.error("Reconcile failed:", err);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleStatusChange = (recId, newStatus) => {
-    console.log(`Reconciliation ${recId} marked as: ${newStatus}`);
-    setSelected((prev) => (prev ? { ...prev, status: newStatus } : prev));
-  };
-
+  // chip colors
   const statusColor = (status) => {
     switch (status) {
       case "Matched":
@@ -79,34 +77,26 @@ export default function Reconciliation() {
   return (
     <Box p={3}>
       <Typography variant="h5" fontWeight="bold" mb={2}>
-        Reconciliation
+        Reconciliations
       </Typography>
 
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Reconciliation ID</TableCell>
-              <TableCell>Purchase ID</TableCell>
-              <TableCell>Item</TableCell>
-              <TableCell>Supplier</TableCell>
-              <TableCell>Requested (₹)</TableCell>
-              <TableCell>Invoice (₹)</TableCell>
+              <TableCell>Purchase Request</TableCell>
+              <TableCell>Requested Qty</TableCell>
+              <TableCell>Invoice Amount</TableCell>
               <TableCell>Status</TableCell>
-              <TableCell>Reconciled By</TableCell>
-              <TableCell>Date</TableCell>
-              <TableCell align="center">Actions</TableCell>
+              <TableCell>Reconcile</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {mockReconciliations.map((rec) => (
+            {recs.map((rec) => (
               <TableRow key={rec.id}>
-                <TableCell>{rec.id}</TableCell>
-                <TableCell>{rec.purchaseId}</TableCell>
-                <TableCell>{rec.item}</TableCell>
-                <TableCell>{rec.supplier}</TableCell>
-                <TableCell>₹{rec.requestedAmount}</TableCell>
-                <TableCell>₹{rec.invoiceAmount}</TableCell>
+                <TableCell>{rec.purchase_requests?.item}</TableCell>
+                <TableCell>{rec.requested_amount}</TableCell>
+                <TableCell>₹{rec.invoice_amount}</TableCell>
                 <TableCell>
                   <Chip
                     label={rec.status}
@@ -114,89 +104,33 @@ export default function Reconciliation() {
                     size="small"
                   />
                 </TableCell>
-                <TableCell>{rec.reconciledBy}</TableCell>
-                <TableCell>{rec.date}</TableCell>
-                <TableCell align="center">
-                  <IconButton
-                    color="primary"
-                    onClick={() => handleOpen(rec)}
+                <TableCell>
+                  <TextField
+                    size="small"
+                    type="number"
+                    placeholder="Enter invoice"
+                    value={invoiceAmount[rec.purchase_requests?.id] || ""}
+                    onChange={(e) =>
+                      setInvoiceAmount((prev) => ({
+                        ...prev,
+                        [rec.purchase_requests?.id]: e.target.value,
+                      }))
+                    }
+                    sx={{ mr: 1, width: 120 }}
+                  />
+                  <Button
+                    variant="contained"
+                    onClick={() => handleReconcile(rec.purchase_requests?.id)}
+                    disabled={loading}
                   >
-                    <VisibilityIcon />
-                  </IconButton>
-                  <IconButton
-                    color="success"
-                    onClick={() => handleStatusChange(rec.id, "Matched")}
-                  >
-                    <CheckCircleIcon />
-                  </IconButton>
-                  <IconButton
-                    color="error"
-                    onClick={() => handleStatusChange(rec.id, "Mismatch")}
-                  >
-                    <CancelIcon />
-                  </IconButton>
+                    Submit
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
-
-      {/* Modal */}
-      <Modal open={open} onClose={handleClose}>
-        <Box
-          sx={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            width: 500,
-            bgcolor: "background.paper",
-            borderRadius: 2,
-            boxShadow: 24,
-            p: 3,
-          }}
-        >
-          {selected && (
-            <>
-              <Typography variant="h6" gutterBottom>
-                Reconciliation Detail – {selected.id}
-              </Typography>
-              <Divider sx={{ mb: 2 }} />
-              <Typography><b>Purchase ID:</b> {selected.purchaseId}</Typography>
-              <Typography><b>Item:</b> {selected.item}</Typography>
-              <Typography><b>Supplier:</b> {selected.supplier}</Typography>
-              <Typography><b>Requested Amount:</b> ₹{selected.requestedAmount}</Typography>
-              <Typography><b>Invoice Amount:</b> ₹{selected.invoiceAmount}</Typography>
-              <Typography><b>Status:</b> {selected.status}</Typography>
-              <Typography><b>Reconciled By:</b> {selected.reconciledBy}</Typography>
-              <Typography><b>Date:</b> {selected.date}</Typography>
-
-              <Box mt={3} display="flex" justifyContent="space-between">
-                <Button
-                  variant="contained"
-                  color="success"
-                  startIcon={<CheckCircleIcon />}
-                  onClick={() => handleStatusChange(selected.id, "Matched")}
-                >
-                  Mark Matched
-                </Button>
-                <Button
-                  variant="contained"
-                  color="error"
-                  startIcon={<CancelIcon />}
-                  onClick={() => handleStatusChange(selected.id, "Mismatch")}
-                >
-                  Mark Mismatch
-                </Button>
-                <Button variant="outlined" onClick={handleClose}>
-                  Close
-                </Button>
-              </Box>
-            </>
-          )}
-        </Box>
-      </Modal>
     </Box>
   );
 }
