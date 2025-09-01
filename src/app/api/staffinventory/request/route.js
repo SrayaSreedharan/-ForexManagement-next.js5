@@ -2,16 +2,18 @@ import { supabase } from '../../../lib/supabaseClient';
 
 export async function POST(req) {
   try {
-    const { item, category, supplier, quantity, reason } = await req.json();
+    const { item, category, supplier, quantity, price, reason } = await req.json();
 
-    if (!item || !quantity) {
+    if (!item || !quantity || !price) {
       return new Response(
-        JSON.stringify({ error: "Item and quantity are required." }),
+        JSON.stringify({ error: "Item, quantity, and price are required." }),
         { status: 400 }
       );
     }
 
     const qty = Number(quantity);
+    const unitPrice = Number(price);
+
     if (isNaN(qty) || qty <= 0) {
       return new Response(
         JSON.stringify({ error: "Quantity must be a positive number." }),
@@ -19,17 +21,25 @@ export async function POST(req) {
       );
     }
 
+    if (isNaN(unitPrice) || unitPrice <= 0) {
+      return new Response(
+        JSON.stringify({ error: "Price must be a positive number." }),
+        { status: 400 }
+      );
+    }
+
     const { data, error } = await supabase
-      .from('purchase_requests')
+      .from("purchase_requests")
       .insert([
         {
           item,
-          category,   
-          supplier,   
+          category,
+          supplier,
           quantity: qty,
+          price: unitPrice, // ✅ store price
           reason,
-          status: "pending", 
-        }
+          status: "pending",
+        },
       ])
       .select();
 
@@ -38,7 +48,6 @@ export async function POST(req) {
     }
 
     return new Response(JSON.stringify({ data }), { status: 200 });
-
   } catch (err) {
     console.error("POST /staffinventory/request error:", err);
     return new Response(JSON.stringify({ error: err.message }), { status: 500 });

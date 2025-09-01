@@ -70,6 +70,8 @@ const PurchaseOrders = () => {
               <TableCell>Item</TableCell>
               <TableCell>Category</TableCell>
               <TableCell>Quantity</TableCell>
+                            <TableCell>Price</TableCell>
+
               <TableCell>Supplier</TableCell>
               <TableCell>Requestor</TableCell>
               <TableCell>Status</TableCell>
@@ -83,6 +85,7 @@ const PurchaseOrders = () => {
                 <TableCell>{req.item}</TableCell>
                 <TableCell>{req.category}</TableCell>
                 <TableCell>{req.quantity}</TableCell>
+                <TableCell>{req.price}</TableCell>
                 <TableCell>{req.supplier}</TableCell>
                 <TableCell>{req.requestor}</TableCell>
                 <TableCell>{req.status}</TableCell>
@@ -137,6 +140,9 @@ const PurchaseOrders = () => {
               </Typography>
               <Typography>
                 <b>Quantity:</b> {selected.quantity}
+              </Typography>
+              <Typography>
+                <b>Price:</b> {selected.quantity}
               </Typography>
               <Typography>
                 <b>Supplier:</b> {selected.supplier}

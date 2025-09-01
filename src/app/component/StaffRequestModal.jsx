@@ -1,22 +1,32 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import {Dialog,DialogTitle,DialogContent,DialogActions,Typography,TextField,Button,} from "@mui/material";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Typography,
+  TextField,
+  Button,
+} from "@mui/material";
 
 const StaffRequestModal = ({ open, onClose, item }) => {
   const [quantity, setQuantity] = useState(0);
+  const [price, setPrice] = useState(0);
   const [reason, setReason] = useState("");
 
   useEffect(() => {
     if (!open) {
       setQuantity(0);
+      setPrice(0);
       setReason("");
     }
   }, [open]);
 
   const handleSubmit = async () => {
-    if (!item?.name || !item?.category || !item?.supplier || quantity <= 0) {
-      alert("Please enter valid details.");
+    if (!item?.name || !item?.category || !item?.supplier || quantity <= 0 || price <= 0) {
+      alert("Please enter valid details (Quantity & Price must be greater than 0).");
       return;
     }
 
@@ -29,6 +39,7 @@ const StaffRequestModal = ({ open, onClose, item }) => {
           category: item.category,
           supplier: item.supplier,
           quantity,
+          price,
           reason,
         }),
       });
@@ -51,9 +62,15 @@ const StaffRequestModal = ({ open, onClose, item }) => {
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>Purchase Request</DialogTitle>
       <DialogContent>
-        <Typography mb={1}><b>Item:</b> {item?.name}</Typography>
-        <Typography mb={1}><b>Category:</b> {item?.category}</Typography>
-        <Typography mb={2}><b>Supplier:</b> {item?.supplier}</Typography>
+        <Typography mb={1}>
+          <b>Item:</b> {item?.name}
+        </Typography>
+        <Typography mb={1}>
+          <b>Category:</b> {item?.category}
+        </Typography>
+        <Typography mb={2}>
+          <b>Supplier:</b> {item?.supplier}
+        </Typography>
 
         <TextField
           label="Quantity"
@@ -63,6 +80,16 @@ const StaffRequestModal = ({ open, onClose, item }) => {
           value={quantity}
           onChange={(e) => setQuantity(Number(e.target.value))}
         />
+
+        <TextField
+          label="Price per unit"
+          type="number"
+          fullWidth
+          margin="normal"
+          value={price}
+          onChange={(e) => setPrice(Number(e.target.value))}
+        />
+
         <TextField
           label="Reason"
           multiline
