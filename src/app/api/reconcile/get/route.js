@@ -42,7 +42,7 @@ export async function GET() {
           id: rec.id,
           item: rec.item,
           quantity: rec.quantity,
-          price: inventoryPrice, // unit price from inventory
+          price: inventoryPrice, 
           reason: rec.reason,
         },
         requested_amount: requestedAmount,
