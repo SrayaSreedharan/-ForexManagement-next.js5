@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 
 export async function GET() {
   try {
-    // Fetch purchase requests and join with inventory_items by item name
+   
     const { data, error } = await supabase
       .from("purchase_requests")
       .select(`
@@ -20,15 +20,15 @@ export async function GET() {
 
     if (error) throw error;
 
-    // Map data to include requested_amount and status
+    
     const reconciliations = data.map((rec) => {
       const inventoryPrice = rec.inventory_items?.[0]?.price || 0;
       const requestedAmount = inventoryPrice * rec.quantity;
 
-      // Default invoice_amount could be null or 0
+     
       const invoiceAmount = rec.invoice_amount || 0;
 
-      // Compare invoice_amount with requestedAmount
+     
       const status =
         invoiceAmount === 0
           ? "Pending"
