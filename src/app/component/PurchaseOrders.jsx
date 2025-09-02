@@ -64,8 +64,6 @@ const PurchaseOrders = () => {
 
       <TableContainer component={Paper} sx={{ mt: 5 }}>
         <Table>
-         
-
             <TableHead>
             <TableRow sx={{ backgroundColor: "#1976d2" }}>
               <TableCell sx={{ color: "white", fontWeight: "bold" }}>
