@@ -2,17 +2,16 @@ import { supabase } from "../../../lib/supabaseClient";
 
 export async function GET() {
   try {
-    // 1. Fetch purchase requests (ensure 'price' column exists in schema)
     const { data: purchases, error: purchaseError } = await supabase
       .from("purchase_requests")
-      .select("id, item, quantity, price"); // <-- add 'price' column in DB if missing
+      .select("id, item, quantity, price"); 
 
     if (purchaseError) {
       console.error("Purchase fetch error:", purchaseError);
       return new Response(JSON.stringify({ error: purchaseError.message }), { status: 500 });
     }
 
-    // 2. Fetch inventory items
+    
     const { data: inventory, error: inventoryError } = await supabase
       .from("inventory_items")
       .select("id, name, price");
@@ -22,7 +21,7 @@ export async function GET() {
       return new Response(JSON.stringify({ error: inventoryError.message }), { status: 500 });
     }
 
-    // 3. Merge by item name
+    
     const reconciliation = purchases.map((pr) => {
       const inv = inventory.find((i) => i.name === pr.item);
       return {
