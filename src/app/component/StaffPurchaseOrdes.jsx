@@ -7,6 +7,7 @@ const StaffPurchaseOrders = () => {
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
 
+// ===============================================FETCH INVENTORY ITEM===================================================
   const fetchData = async () => {
     try {
       const res = await fetch("/api/staffinventory/get");
