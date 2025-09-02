@@ -66,7 +66,7 @@ const PurchaseOrders = () => {
         <Table>
          
 
-                  <TableHead>
+            <TableHead>
             <TableRow sx={{ backgroundColor: "#1976d2" }}>
               <TableCell sx={{ color: "white", fontWeight: "bold" }}>
                 Requested ID
