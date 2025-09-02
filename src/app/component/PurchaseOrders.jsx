@@ -91,18 +91,6 @@ const PurchaseOrders = () => {
             </TableRow>
           </TableHead>
 
-          
-
-
-
-
-
-
-
-
-
-
-
           <TableBody>
             {requests.map((req) => (
               <TableRow key={req.id}>
