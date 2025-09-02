@@ -30,7 +30,6 @@ export async function GET() {
         purchase_quantity: pr.quantity,
         purchase_price: pr.price ?? null,
         inventory_price: inv?.price ?? null,
-        // ✅ Flip subtraction to show positive when inventory is higher
         price_difference:
           inv && pr.price != null ? inv.price - pr.price : null,
       };
