@@ -1,6 +1,5 @@
 import { supabase } from "../../../lib/supabaseClient";
 
-// GET /api/reconcile/get
 export async function GET() {
   try {
     // 1. Fetch purchase requests (ensure 'price' column exists in schema)
