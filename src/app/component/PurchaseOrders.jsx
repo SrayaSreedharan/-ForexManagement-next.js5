@@ -64,20 +64,47 @@ const PurchaseOrders = () => {
 
       <TableContainer component={Paper} sx={{ mt: 5 }}>
         <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Request ID</TableCell>
-              <TableCell>Item</TableCell>
-              <TableCell>Category</TableCell>
-              <TableCell>Quantity</TableCell>
-                            <TableCell>Price</TableCell>
+         
 
-              <TableCell>Supplier</TableCell>
-              <TableCell>Requestor</TableCell>
-              <TableCell>Status</TableCell>
+                  <TableHead>
+            <TableRow sx={{ backgroundColor: "#1976d2" }}>
+              <TableCell sx={{ color: "white", fontWeight: "bold" }}>
+                Requested ID
+              </TableCell>
+              <TableCell sx={{ color: "white", fontWeight: "bold" }}>
+                Item
+              </TableCell>
+              <TableCell sx={{ color: "white", fontWeight: "bold" }}>
+                Category
+              </TableCell>
+              <TableCell sx={{ color: "white", fontWeight: "bold" }}>
+                Quantity
+              </TableCell>
+              <TableCell sx={{ color: "white", fontWeight: "bold" }}>
+                Price
+              </TableCell>
+              <TableCell sx={{ color: "white", fontWeight: "bold" }}>
+                Supplier
+              </TableCell>
+              <TableCell sx={{ color: "white", fontWeight: "bold" }}>
+                Status
+              </TableCell>
               <TableCell align="center">Actions</TableCell>
             </TableRow>
           </TableHead>
+
+          
+
+
+
+
+
+
+
+
+
+
+
           <TableBody>
             {requests.map((req) => (
               <TableRow key={req.id}>
@@ -87,7 +114,6 @@ const PurchaseOrders = () => {
                 <TableCell>{req.quantity}</TableCell>
                 <TableCell>{req.price}</TableCell>
                 <TableCell>{req.supplier}</TableCell>
-                <TableCell>{req.requestor}</TableCell>
                 <TableCell>{req.status}</TableCell>
                 <TableCell align="center">
                   <IconButton color="primary" onClick={() => handleOpen(req)}>

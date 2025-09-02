@@ -1,62 +1,46 @@
-import { supabase } from '../../../lib/supabaseClient';
-import { NextResponse } from "next/server";
+import { supabase } from "../../../lib/supabaseClient";
 
+// GET /api/reconcile/get
 export async function GET() {
   try {
-   
-    const { data, error } = await supabase
+    // 1. Fetch purchase requests (ensure 'price' column exists in schema)
+    const { data: purchases, error: purchaseError } = await supabase
       .from("purchase_requests")
-      .select(`
-        id,
-        item,
-        quantity,
-        reason,
-        created_at,
-        inventory_items!inner(
-          price
-        )
-      `)
-      .order("created_at", { ascending: false });
+      .select("id, item, quantity, price"); // <-- add 'price' column in DB if missing
 
-    if (error) throw error;
+    if (purchaseError) {
+      console.error("Purchase fetch error:", purchaseError);
+      return new Response(JSON.stringify({ error: purchaseError.message }), { status: 500 });
+    }
 
-    
-    const reconciliations = data.map((rec) => {
-      const inventoryPrice = rec.inventory_items?.[0]?.price || 0;
-      const requestedAmount = inventoryPrice * rec.quantity;
+    // 2. Fetch inventory items
+    const { data: inventory, error: inventoryError } = await supabase
+      .from("inventory_items")
+      .select("id, name, price");
 
-     
-      const invoiceAmount = rec.invoice_amount || 0;
+    if (inventoryError) {
+      console.error("Inventory fetch error:", inventoryError);
+      return new Response(JSON.stringify({ error: inventoryError.message }), { status: 500 });
+    }
 
-     
-      const status =
-        invoiceAmount === 0
-          ? "Pending"
-          : invoiceAmount === requestedAmount
-          ? "Matched"
-          : "Mismatch";
-
+    // 3. Merge by item name
+    const reconciliation = purchases.map((pr) => {
+      const inv = inventory.find((i) => i.name === pr.item);
       return {
-        id: rec.id,
-        purchase_requests: {
-          id: rec.id,
-          item: rec.item,
-          quantity: rec.quantity,
-          price: inventoryPrice, 
-          reason: rec.reason,
-        },
-        requested_amount: requestedAmount,
-        invoice_amount: invoiceAmount,
-        status,
-        reconciled_by: rec.reconciled_by || null,
-        created_at: rec.created_at,
+        purchase_id: pr.id,
+        item_name: pr.item,
+        purchase_quantity: pr.quantity,
+        purchase_price: pr.price ?? null,
+        inventory_price: inv?.price ?? null,
+        // ✅ Flip subtraction to show positive when inventory is higher
+        price_difference:
+          inv && pr.price != null ? inv.price - pr.price : null,
       };
     });
 
-    return NextResponse.json({ reconciliations }, { status: 200 });
-
+    return new Response(JSON.stringify(reconciliation), { status: 200 });
   } catch (err) {
-    console.error(" GET /api/staffinventory/get error:", err.message);
-    return NextResponse.json({ error: err.message }, { status: 500 });
+    console.error("Handler error:", err);
+    return new Response(JSON.stringify({ error: err.message }), { status: 500 });
   }
 }
