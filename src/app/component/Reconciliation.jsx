@@ -17,8 +17,6 @@ export default function ReconciliationPage() {
     <div style={{ padding: "20px" }}>
      <Typography variant="h5" fontWeight="bold">
             Reconciliation
-          
-       
       </Typography>
 
       <TableContainer component={Paper} sx={{ borderRadius: 2, boxShadow: 3, mt: 5 }}>
