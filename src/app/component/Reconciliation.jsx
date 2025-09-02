@@ -1,8 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import {Table,TableBody,TableCell,TableContainer,TableHead,TableRow,Paper,Typography,} 
-from "@mui/material";
+import {Table,TableBody,TableCell,TableContainer,TableHead,TableRow,Paper,Typography,} from "@mui/material";
 
 export default function ReconciliationPage() {
   const [data, setData] = useState([]);
